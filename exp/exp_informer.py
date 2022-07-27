@@ -127,8 +127,15 @@ class Exp_Informer(Exp_Basic):
         vali_data, vali_loader = self._get_data(flag = 'val')
         test_data, test_loader = self._get_data(flag = 'test')
         
-        print('train_data', train_data.shape, train_data)
-        print('train_loader', train_loader.shape, train_loader)
+        
+        
+        
+        print('train_data')
+        print(train_data)
+        print('train_loader')
+        print(train_loader)
+        
+        
         
 
         path = os.path.join(self.args.checkpoints, setting)
