@@ -129,12 +129,51 @@ class Exp_Informer(Exp_Basic):
         
         
         
-        
-        print('train_data')
-        print(train_data)
-        print('train_loader')
-        print(train_loader)
-        
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+        import requests
+        import pprint
+
+        print('\n■train■\n')
+        print('\n▼train_data\n')
+        pprint.pprint(vars(train_data))
+        print('\n▼train_loader\n')
+        pprint.pprint(vars(train_loader))
+
+        print('\n▼stamp\n')
+        print(train_data.data_stamp.shape)
+        print('\n▼x\n')
+        print(train_data.data_x.shape)
+        print('\n▼y\n')
+        print(train_data.data_y.shape)
+
+
+        print('\n■vali■\n')
+        print('\n▼vali_data\n')
+        pprint.pprint(vars(vali_data))
+        print('\n▼vali_loader\n')
+        pprint.pprint(vars(vali_loader)) 
+
+        print('\n▼stamp\n')
+        print(vali_data.data_stamp.shape)
+        print('\n▼x\n')
+        print(vali_data.data_x.shape)
+        print('\n▼y\n')
+        print(vali_data.data_y.shape)
+
+
+        print('\n■test■\n')
+        print('\n▼test_data\n')
+        pprint.pprint(vars(test_data))
+        print('\n▼test_loader\n')
+        pprint.pprint(vars(test_loader))
+
+        print('\n▼stamp\n')
+        print(test_data.data_stamp.shape)
+        print('\n▼x\n')
+        print(test_data.data_x.shape)
+        print('\n▼y\n')
+        print(test_data.data_y.shape)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
 
