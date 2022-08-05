@@ -246,15 +246,15 @@ class Dataset_Custom(Dataset):
         border2 = border2s[self.set_type]                                              #上記3要素の中から1つを選択
         
         if self.features=='M' or self.features=='MS':
-            cols_data = df_raw.columns[1:]
-            df_data = df_raw[cols_data]
+            cols_data = df_raw.columns[1:]                                             #カラム('SHO_MTI', 'ENEOS', 'SBI_HD', 'JT', 'TAKEDA', 'TO_DEN', 'AGC', 'TOYOTA')
+            df_data = df_raw[cols_data]                                                #df_data:(5159,8)
         elif self.features=='S':
             df_data = df_raw[[self.target]]
 
         if self.scale:
-            train_data = df_data[border1s[0]:border2s[0]]
+            train_data = df_data[border1s[0]:border2s[0]]                              #train_data:(3611,8)
             self.scaler.fit(train_data.values)
-            data = self.scaler.transform(df_data.values)
+            data = self.scaler.transform(df_data.values)                               #
         else:
             data = df_data.values
 
