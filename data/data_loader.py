@@ -190,7 +190,13 @@ class Dataset_ETT_minute(Dataset):
     
     
     
-#//////////////////////////////////////////////////////////////////////////////////////////////////////    
+    
+    
+    
+    
+    
+    
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    
     
 class Dataset_Custom(Dataset):
     def __init__(self, root_path, flag='train', size=None, 
@@ -253,8 +259,8 @@ class Dataset_Custom(Dataset):
 
         if self.scale:
             train_data = df_data[border1s[0]:border2s[0]]                              #train_data:(3611,8)
-            self.scaler.fit(train_data.values)
-            data = self.scaler.transform(df_data.values)                               #
+            self.scaler.fit(train_data.values)                                         #train_dataの平均・標準偏差(多分)
+            data = self.scaler.transform(df_data.values)                               #data:(5159,8):train_dataでスケーリング
         else:
             data = df_data.values
 
@@ -287,10 +293,36 @@ class Dataset_Custom(Dataset):
 
         self.data_x = data[border1:border2]
         if self.inverse:
+            print('1')
             self.data_y = df_data.values[border1:border2]
         else:
             self.data_y = data[border1:border2]
         self.data_stamp = data_stamp
+        
+        
+        
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+        print('\n▼df_stamp')
+        print(df_stamp)
+        print(df_stamp.shape)
+        
+        print('\n▼data_stamp')
+        print(data_stamp)
+        print(data_stamp.shape)
+        
+        print('\n▼data_x')
+        print(data[border1:border2])
+        print(data[border1:border2].shape)
+        
+        print('\n▼data_y')
+        print(df_data.values[border1:border2])
+        print(df_data.values[border1:border2].shape)
+        
+        print('border1,border2')
+        print(border1,border2)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////        
+        
+        
     
     def __getitem__(self, index):
         s_begin = index
@@ -315,7 +347,18 @@ class Dataset_Custom(Dataset):
         return self.scaler.inverse_transform(data)
 
     
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
