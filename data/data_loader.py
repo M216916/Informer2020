@@ -185,6 +185,13 @@ class Dataset_ETT_minute(Dataset):
         return self.scaler.inverse_transform(data)
 
 
+    
+    
+    
+    
+    
+#//////////////////////////////////////////////////////////////////////////////////////////////////////    
+    
 class Dataset_Custom(Dataset):
     def __init__(self, root_path, flag='train', size=None, 
                  features='S', data_path='ETTh1.csv', 
@@ -192,9 +199,9 @@ class Dataset_Custom(Dataset):
         # size [seq_len, label_len, pred_len]
         # info
         if size == None:
-            self.seq_len = 24*4*4
-            self.label_len = 24*4
-            self.pred_len = 24*4
+            self.seq_len = 24*4*4    #96
+            self.label_len = 24*4    #48
+            self.pred_len = 24*4     #10(予測の長さ)
         else:
             self.seq_len = size[0]
             self.label_len = size[1]
@@ -228,15 +235,15 @@ class Dataset_Custom(Dataset):
             cols.remove(self.target)
         else:
             cols = list(df_raw.columns); cols.remove(self.target); cols.remove('date')
-        df_raw = df_raw[['date']+cols+[self.target]]
+        df_raw = df_raw[['date']+cols+[self.target]]　　　　　　　　　　　　　　　　　　#df_raw:(5159,9)
 
-        num_train = int(len(df_raw)*0.7)
-        num_test = int(len(df_raw)*0.2)
-        num_vali = len(df_raw) - num_train - num_test
-        border1s = [0, num_train-self.seq_len, len(df_raw)-num_test-self.seq_len]
-        border2s = [num_train, num_train+num_vali, len(df_raw)]
-        border1 = border1s[self.set_type]
-        border2 = border2s[self.set_type]
+        num_train = int(len(df_raw)*0.7)                                               #3611(5159*0.7)
+        num_test = int(len(df_raw)*0.2)                                                #1031(5159*0.2)
+        num_vali = len(df_raw) - num_train - num_test                                  #517 (5159-3611-1031)
+        border1s = [0, num_train-self.seq_len, len(df_raw)-num_test-self.seq_len]      #[   0,3515,4032]
+        border2s = [num_train, num_train+num_vali, len(df_raw)]                        #[3611,4128,5159]
+        border1 = border1s[self.set_type]                                              #上記3要素の中から1つを選択
+        border2 = border2s[self.set_type]                                              #上記3要素の中から1つを選択
         
         if self.features=='M' or self.features=='MS':
             cols_data = df_raw.columns[1:]
@@ -250,7 +257,30 @@ class Dataset_Custom(Dataset):
             data = self.scaler.transform(df_data.values)
         else:
             data = df_data.values
+
             
+            
+#//////////////////////////////////////////////////////////////////////////////////////////////////////           
+        print('\n▼cals_data')
+        print(cals_data)
+        print(cals_data.shape)
+        
+        print('\n▼df_data')
+        print(df_data)
+        print(df_data.shape)
+        
+        print('\n▼train_data')
+        print(train_data)
+        print(train_data.shape)
+        
+        print('\n▼data')
+        print(data)
+        print(data.shape)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+              
+              
+              
+              
         df_stamp = df_raw[['date']][border1:border2]
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
         data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)
@@ -284,6 +314,13 @@ class Dataset_Custom(Dataset):
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
 
+    
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
+    
 class Dataset_Pred(Dataset):
     def __init__(self, root_path, flag='pred', size=None, 
                  features='S', data_path='ETTh1.csv', 
