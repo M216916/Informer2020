@@ -291,7 +291,7 @@ class Dataset_Custom(Dataset):
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
         data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)         #data_stamp:(3611,5) … ただdf_stampを変換しただけ？
 
-        self.data_x = data[border1:border2]　　　　　　　　　　　　　　　　　　　　　　　　　#data_x:(3611,8) … 標準化されている(trainのとき)
+        self.data_x = data[border1:border2]                                                #data_x:(3611,8) … 標準化されている(trainのとき)
         if self.inverse:                                                                   #       ( 613,8)
             self.data_y = df_data.values[border1:border2]                                  #       (1127,8)
         else:
