@@ -267,59 +267,59 @@ class Dataset_Custom(Dataset):
             
             
 #//////////////////////////////////////////////////////////////////////////////////////////////////////           
-        print('\n▼cols_data')
-        print(cols_data)
-        print(cols_data.shape)
+#        print('\n▼cols_data')
+#        print(cols_data)
+#        print(cols_data.shape)
         
-        print('\n▼df_data')
-        print(df_data)
-        print(df_data.shape)
+#        print('\n▼df_data')
+#        print(df_data)
+#        print(df_data.shape)
         
-        print('\n▼train_data')
-        print(train_data)
-        print(train_data.shape)
+#        print('\n▼train_data')
+#        print(train_data)
+#        print(train_data.shape)
         
-        print('\n▼data')
-        print(data)
-        print(data.shape)
+#        print('\n▼data')
+#        print(data)
+#        print(data.shape)
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
               
               
               
               
-        df_stamp = df_raw[['date']][border1:border2]
+        df_stamp = df_raw[['date']][border1:border2]                                       #df_stamp:(3611,1) … train 0~3611／vali 3515~4128／test 4032~5159 
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
-        data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)
+        data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)         #data_stamp:(3611,5) … ただdf_stampを変換しただけ？
 
-        self.data_x = data[border1:border2]
-        if self.inverse:
-            print('1')
-            self.data_y = df_data.values[border1:border2]
+        self.data_x = data[border1:border2]　　　　　　　　　　　　　　　　　　　　　　　　　#data_x:(3611,8) … 標準化されている(trainのとき)
+        if self.inverse:                                                                   #       ( 613,8)
+            self.data_y = df_data.values[border1:border2]                                  #       (1127,8)
         else:
-            self.data_y = data[border1:border2]
-        self.data_stamp = data_stamp
+            self.data_y = data[border1:border2]                                            #data_y:(3611,8) … 標準化されていない(trainのとき)
+        self.data_stamp = data_stamp                                                       #       ( 613.8)
+                                                                                           #       (1127,8)
         
         
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
-        print('\n▼df_stamp')
-        print(df_stamp)
-        print(df_stamp.shape)
+#        print('\n▼df_stamp')
+#        print(df_stamp)
+#        print(df_stamp.shape)
         
-        print('\n▼data_stamp')
-        print(data_stamp)
-        print(data_stamp.shape)
+#        print('\n▼data_stamp')
+#        print(data_stamp)
+#        print(data_stamp.shape)
         
-        print('\n▼data_x')
-        print(data[border1:border2])
-        print(data[border1:border2].shape)
+#        print('\n▼data_x')
+#        print(data[border1:border2])
+#        print(data[border1:border2].shape)
         
-        print('\n▼data_y')
-        print(df_data.values[border1:border2])
-        print(df_data.values[border1:border2].shape)
+#        print('\n▼data_y')
+#        print(df_data.values[border1:border2])
+#        print(df_data.values[border1:border2].shape)
         
-        print('border1,border2')
-        print(border1,border2)
+#        print('border1,border2')
+#        print(border1,border2)
 #//////////////////////////////////////////////////////////////////////////////////////////////////////        
         
         
@@ -333,10 +333,35 @@ class Dataset_Custom(Dataset):
         seq_x = self.data_x[s_begin:s_end]
         if self.inverse:
             seq_y = np.concatenate([self.data_x[r_begin:r_begin+self.label_len], self.data_y[r_begin+self.label_len:r_end]], 0)
+            print('\n■■■■難しい方通ったよ■■■■\n')
         else:
             seq_y = self.data_y[r_begin:r_end]
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
+        
+        
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+        print('\n▼s_begin, s_end, r_begin, r_end')
+        print(s_begin, s_end, r_begin, r_end)
+        
+        print('\n▼seq_x')
+        print(seq_x)
+        print(seq_x.shape)
+        
+        print('\n▼seq_y')
+        print(seq_y)
+        print(seq_y.shape)        
+        
+        print('\n▼seq_x_mark')
+        print(seq_x_mark)
+        print(seq_x_mark.shape)
+        
+        print('\n▼seq_y_mark')
+        print(seq_y_mark)
+        print(seq_y_mark.shape)      
+#////////////////////////////////////////////////////////////////////////////////////////////////////// 
+        
+        
 
         return seq_x, seq_y, seq_x_mark, seq_y_mark
     
