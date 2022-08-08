@@ -345,19 +345,15 @@ class Dataset_Custom(Dataset):
         print(s_begin, s_end, r_begin, r_end)
         
         print('\n▼seq_x')
-        print(seq_x)
         print(seq_x.shape)
         
         print('\n▼seq_y')
-        print(seq_y)
         print(seq_y.shape)        
         
         print('\n▼seq_x_mark')
-        print(seq_x_mark)
         print(seq_x_mark.shape)
         
         print('\n▼seq_y_mark')
-        print(seq_y_mark)
         print(seq_y_mark.shape)      
 #////////////////////////////////////////////////////////////////////////////////////////////////////// 
         
