@@ -341,20 +341,20 @@ class Dataset_Custom(Dataset):
         
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
-        print('\n▼s_begin, s_end, r_begin, r_end')
-        print(s_begin, s_end, r_begin, r_end)
+        print('\n▼index, s_begin, s_end, r_begin, r_end')
+        print(index, s_begin, s_end, r_begin, r_end)
         
-        print('\n▼seq_x')
-        print(seq_x.shape)
+#        print('\n▼seq_x')
+#        print(seq_x.shape)
         
-        print('\n▼seq_y')
-        print(seq_y.shape)        
+#        print('\n▼seq_y')
+#        print(seq_y.shape)        
         
-        print('\n▼seq_x_mark')
-        print(seq_x_mark.shape)
+#        print('\n▼seq_x_mark')
+#        print(seq_x_mark.shape)
         
-        print('\n▼seq_y_mark')
-        print(seq_y_mark.shape)      
+#        print('\n▼seq_y_mark')
+#        print(seq_y_mark.shape)      
 #////////////////////////////////////////////////////////////////////////////////////////////////////// 
         
         
