@@ -330,8 +330,6 @@ class Dataset_Custom(Dataset):
         r_begin = s_end - self.label_len 
         r_end = r_begin + self.label_len + self.pred_len
        
-        print('self.inverse', self.inverse)
-
         seq_x = self.data_x[s_begin:s_end]                       #seq_x     :(96,8) ← 標準化した data_x から抽出
         if self.inverse:
             seq_y = np.concatenate(
@@ -345,8 +343,8 @@ class Dataset_Custom(Dataset):
         
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
-        print('\n▼index, s_begin, s_end, r_begin, r_end')
-        print(index, s_begin, s_end, r_begin, r_end)
+#        print('\n▼index, s_begin, s_end, r_begin, r_end')
+#        print(index, s_begin, s_end, r_begin, r_end)
         
 #        print('\n▼seq_x')
 #        print(seq_x.shape)
