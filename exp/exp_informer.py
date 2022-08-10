@@ -325,7 +325,6 @@ class Exp_Informer(Exp_Basic):
         print('\n▼self.args.padding', self.args.padding)
         print('\n▼dec_inp')
         print(dec_inp.shape)
-        print(dec_inp)
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
