@@ -130,49 +130,49 @@ class Exp_Informer(Exp_Basic):
         
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
-        import requests
-        import pprint
+#        import requests
+#        import pprint
 
-        print('\n■train■\n')
-        print('\n▼train_data\n')
-        pprint.pprint(vars(train_data))
-        print('\n▼train_loader\n')
-        pprint.pprint(vars(train_loader))
+#        print('\n■train■\n')
+#        print('\n▼train_data\n')
+#        pprint.pprint(vars(train_data))
+#        print('\n▼train_loader\n')
+#        pprint.pprint(vars(train_loader))
 
-        print('\n▼stamp\n')
-        print(train_data.data_stamp.shape)
-        print('\n▼x\n')
-        print(train_data.data_x.shape)
-        print('\n▼y\n')
-        print(train_data.data_y.shape)
-
-
-        print('\n■vali■\n')
-        print('\n▼vali_data\n')
-        pprint.pprint(vars(vali_data))
-        print('\n▼vali_loader\n')
-        pprint.pprint(vars(vali_loader)) 
-
-        print('\n▼stamp\n')
-        print(vali_data.data_stamp.shape)
-        print('\n▼x\n')
-        print(vali_data.data_x.shape)
-        print('\n▼y\n')
-        print(vali_data.data_y.shape)
+#        print('\n▼stamp\n')
+#        print(train_data.data_stamp.shape)
+#        print('\n▼x\n')
+#        print(train_data.data_x.shape)
+#        print('\n▼y\n')
+#        print(train_data.data_y.shape)
 
 
-        print('\n■test■\n')
-        print('\n▼test_data\n')
-        pprint.pprint(vars(test_data))
-        print('\n▼test_loader\n')
-        pprint.pprint(vars(test_loader))
+#        print('\n■vali■\n')
+#        print('\n▼vali_data\n')
+#        pprint.pprint(vars(vali_data))
+#        print('\n▼vali_loader\n')
+#        pprint.pprint(vars(vali_loader)) 
 
-        print('\n▼stamp\n')
-        print(test_data.data_stamp.shape)
-        print('\n▼x\n')
-        print(test_data.data_x.shape)
-        print('\n▼y\n')
-        print(test_data.data_y.shape)
+#        print('\n▼stamp\n')
+#        print(vali_data.data_stamp.shape)
+#        print('\n▼x\n')
+#        print(vali_data.data_x.shape)
+#        print('\n▼y\n')
+#        print(vali_data.data_y.shape)
+
+
+#        print('\n■test■\n')
+#        print('\n▼test_data\n')
+#        pprint.pprint(vars(test_data))
+#        print('\n▼test_loader\n')
+#        pprint.pprint(vars(test_loader))
+
+#        print('\n▼stamp\n')
+#        print(test_data.data_stamp.shape)
+#        print('\n▼x\n')
+#        print(test_data.data_x.shape)
+#        print('\n▼y\n')
+#        print(test_data.data_y.shape)
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
@@ -319,20 +319,36 @@ class Exp_Informer(Exp_Basic):
         elif self.args.padding==1:
             dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()
         dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)
+        
+        
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+        print('\n▼self.args.padding', self.args.padding)
+        print('\n▼dec_inp')
+        print(dec_inp.shape)
+        print(dec_inp)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        
         # encoder - decoder
         if self.args.use_amp:
             with torch.cuda.amp.autocast():
                 if self.args.output_attention:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
+                    print('【1-1】self.args.use_amp -> self.args.output_attention')
                 else:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+                    print('【1-2】self.args.use_amp -> else')
         else:
             if self.args.output_attention:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
+                print('【2-1】else -> self.args.output_attention')
             else:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
+                print('【2-2】else -> else')
         if self.args.inverse:
             outputs = dataset_object.inverse_transform(outputs)
+            print('ここはとってないはず')
+        print('self.args.inverse', self.args.inverse)
         f_dim = -1 if self.args.features=='MS' else 0
         batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
 
