@@ -339,8 +339,7 @@ class Dataset_Custom(Dataset):
                  self.data_y[r_begin+self.label_len:r_end]], 0)
 
         else:
-            print('こっち通っている！')
-            seq_y = self.data_y[r_begin:r_end]                   #seq_y     :(58,8) ← 標準化されていない data_y から抽出
+            seq_y = self.data_y[r_begin:r_end]                   #seq_y     :(58,8) ← 標準化されていない data_y から抽出　※self.inverse == False(こっち通過)
         seq_x_mark = self.data_stamp[s_begin:s_end]              #seq_x_mark:(96,5) ← seq_x のタイムスタンプ
         seq_y_mark = self.data_stamp[r_begin:r_end]              #seq_y_mark:(58,5) ← seq_y のタイムスタンプ
         
