@@ -329,15 +329,20 @@ class Dataset_Custom(Dataset):
         s_end = s_begin + self.seq_len
         r_begin = s_end - self.label_len 
         r_end = r_begin + self.label_len + self.pred_len
+       
+        print('self.inverse', self.inverse)
 
-        seq_x = self.data_x[s_begin:s_end]
+        seq_x = self.data_x[s_begin:s_end]                       #seq_x     :(96,8) ← 標準化した data_x から抽出
         if self.inverse:
-            seq_y = np.concatenate([self.data_x[r_begin:r_begin+self.label_len], self.data_y[r_begin+self.label_len:r_end]], 0)
-            print('\n■■■■難しい方通ったよ■■■■\n')
+            seq_y = np.concatenate(
+                [self.data_x[r_begin:r_begin+self.label_len], 
+                 self.data_y[r_begin+self.label_len:r_end]], 0)
+
         else:
-            seq_y = self.data_y[r_begin:r_end]
-        seq_x_mark = self.data_stamp[s_begin:s_end]
-        seq_y_mark = self.data_stamp[r_begin:r_end]
+            print('こっち通っている！')
+            seq_y = self.data_y[r_begin:r_end]                   #seq_y     :(58,8) ← 標準化されていない data_y から抽出
+        seq_x_mark = self.data_stamp[s_begin:s_end]              #seq_x_mark:(96,5) ← seq_x のタイムスタンプ
+        seq_y_mark = self.data_stamp[r_begin:r_end]              #seq_y_mark:(58,5) ← seq_y のタイムスタンプ
         
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
