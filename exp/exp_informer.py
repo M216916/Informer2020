@@ -315,23 +315,11 @@ class Exp_Informer(Exp_Basic):
 
         # decoder input
         if self.args.padding==0:
-            dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()      #dec_inp:(32,58,8) pudding=0 のため要素0のテンソルを生成
+            dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()      #dec_inp:(32,10,8) pudding=0 のため要素0のテンソルを生成
         elif self.args.padding==1:
             dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()
+        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  #dec_inp:(32,58,8) ?
 
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
-        print('【1】')
-        print(dec_inp.shape)
-        print(dec_inp)
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)
-                
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
-        print('【2】')
-        print(dec_inp.shape)
-        print(dec_inp)
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
         # encoder - decoder
