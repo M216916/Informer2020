@@ -201,10 +201,20 @@ class Exp_Informer(Exp_Basic):
             for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(train_loader):
                 iter_count += 1
                 
+                print('▼batch_x,batch_y,batch_x_mark,batch_y_mark')
+                print(batch_x.shape ,batch_y.shape,batch_x_mark.shape,batch_y_mark.shape)
+                
                 model_optim.zero_grad()
                 pred, true = self._process_one_batch(
                     train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+                
+                print('▼pred, true')
+                print(pred.shape, true.shape)
+                
                 loss = criterion(pred, true)
+                
+                print('▼loss', loss)
+                
                 train_loss.append(loss.item())
                 
                 if (i+1) % 100==0:
@@ -318,8 +328,7 @@ class Exp_Informer(Exp_Basic):
         elif self.args.padding==1:                                                                        #pudding=0 不実行
             dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()       #↓
             
-        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  #dec_inp:(32,58,8) ?
-        print('▼self.args.label_len', self.args.label_len)
+        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  #dec_inp:(32,58,8) … batch_y(32,0:48,8) + dec_inp:(32,10,8)
 
         
         
