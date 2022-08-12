@@ -307,22 +307,19 @@ class Exp_Informer(Exp_Basic):
         return
 
     def _process_one_batch(self, dataset_object, batch_x, batch_y, batch_x_mark, batch_y_mark):
-        batch_x = batch_x.float().to(self.device)                                            #batch_x     :()
-        batch_y = batch_y.float()                                                            #batch_y     :
-        batch_x_mark = batch_x_mark.float().to(self.device)                                  #batch_x_mark:
-        batch_y_mark = batch_y_mark.float().to(self.device)                                  #batch_y_mark:
-        
-        print(batch_x.shape)
-        print(batch_y.shape)
-        print(batch_x_mark.shape)
-        print(batch_y_mark.shape)
+        batch_x = batch_x.float().to(self.device)                                            #batch_x     :(32,96,8)
+        batch_y = batch_y.float()                                                            #batch_y     :(32,58,8)
+        batch_x_mark = batch_x_mark.float().to(self.device)                                  #batch_x_mark:(32,96,5)
+        batch_y_mark = batch_y_mark.float().to(self.device)                                  #batch_y_mark:(32,58,5)
 
         # decoder input
         if self.args.padding==0:
             dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()      #dec_inp:(32,10,8) pudding=0 のため要素0のテンソルを生成
-        elif self.args.padding==1:
-            dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()
+        elif self.args.padding==1:                                                                        #pudding=0 不実行
+            dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()       #↓
+            
         dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  #dec_inp:(32,58,8) ?
+        print('▼self.args.label_len', self.args.label_len)
 
         
         
@@ -338,13 +335,13 @@ class Exp_Informer(Exp_Basic):
             if self.args.output_attention:                                                    #self.args.output_attention=false のため不実行
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]         #↓
             else:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            #output:(32,20,8)
+                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            #output:(32,10,8)
                 
 
         if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
             outputs = dataset_object.inverse_transform(outputs)                               #↓
 
         f_dim = -1 if self.args.features=='MS' else 0                                         #f_dim = 0
-        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      #batch_y:(32,20,8)
+        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      #batch_y:(32,10,8) … batch_y:(32,58,8)の最後10要素を取得
 
         return outputs, batch_y
