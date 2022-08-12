@@ -343,5 +343,8 @@ class Exp_Informer(Exp_Basic):
 
         f_dim = -1 if self.args.features=='MS' else 0
         batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
+        
+        print('▼f_dim',▼f_dim)
+        print('▼batch_y', batch_y.shape)
 
         return outputs, batch_y
