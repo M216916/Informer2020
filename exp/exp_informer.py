@@ -333,11 +333,12 @@ class Exp_Informer(Exp_Basic):
         else:
             if self.args.output_attention:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-                print('▼self.args.output_attention', self.args.output_attention)
-                print('【2-1】else -> self.args.output_attention')
+#                print('▼self.args.output_attention', self.args.output_attention)
+#                print('【2-1】else -> self.args.output_attention')
             else:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-#                print('【2-2】else -> else')
+                print('▼self.args.output_attention', self.args.output_attention)
+                print('【2-2】else -> else')
                 
 
         if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
