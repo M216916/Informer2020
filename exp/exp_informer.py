@@ -307,11 +307,15 @@ class Exp_Informer(Exp_Basic):
         return
 
     def _process_one_batch(self, dataset_object, batch_x, batch_y, batch_x_mark, batch_y_mark):
-        batch_x = batch_x.float().to(self.device)
-        batch_y = batch_y.float()
-
-        batch_x_mark = batch_x_mark.float().to(self.device)
-        batch_y_mark = batch_y_mark.float().to(self.device)
+        batch_x = batch_x.float().to(self.device)                                            #batch_x     :()
+        batch_y = batch_y.float()                                                            #batch_y     :
+        batch_x_mark = batch_x_mark.float().to(self.device)                                  #batch_x_mark:
+        batch_y_mark = batch_y_mark.float().to(self.device)                                  #batch_y_mark:
+        
+        print(batch_x.shape)
+        print(batch_y.shape)
+        print(batch_x_mark.shape)
+        print(batch_y_mark.shape)
 
         # decoder input
         if self.args.padding==0:
@@ -334,17 +338,13 @@ class Exp_Informer(Exp_Basic):
             if self.args.output_attention:                                                    #self.args.output_attention=false のため不実行
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]         #↓
             else:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                print('▼outputs',outputs.shape) 
+                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            #output:(32,20,8)
                 
 
         if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
             outputs = dataset_object.inverse_transform(outputs)                               #↓
 
-        f_dim = -1 if self.args.features=='MS' else 0
-        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
-        
-        print('▼f_dim',▼f_dim)
-        print('▼batch_y', batch_y.shape)
+        f_dim = -1 if self.args.features=='MS' else 0                                         #f_dim = 0
+        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      #batch_y:(32,20,8)
 
         return outputs, batch_y
