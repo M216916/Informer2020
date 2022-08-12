@@ -323,7 +323,7 @@ class Exp_Informer(Exp_Basic):
         
         
         # encoder - decoder
-        if self.args.use_amp:
+        if self.args.use_amp:                                                                 #self.args.use_amp=false のため不実行
             with torch.cuda.amp.autocast():
                 if self.args.output_attention:
                     outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
@@ -334,12 +334,12 @@ class Exp_Informer(Exp_Basic):
         else:
             if self.args.output_attention:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-                print('【2-1】else -> self.args.output_attention')
+#                print('【2-1】else -> self.args.output_attention')
             else:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                print('【2-2】else -> else')
+#                print('【2-2】else -> else')
                 
-        print('▼self.args.use_amp', self.args.use_amp)
+#        print('▼self.args.use_amp', self.args.use_amp)
                 
         if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
             outputs = dataset_object.inverse_transform(outputs)
