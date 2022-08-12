@@ -198,22 +198,15 @@ class Exp_Informer(Exp_Basic):
             
             self.model.train()
             epoch_time = time.time()
-            for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(train_loader):
+            for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(train_loader):     #batch_x     :(32,96,8)
+                                                                                               #batch_y     :(32,58,8)
+                                                                                               #batch_x_mark:(32,96,5)
+                                                                                               #batch_y_mark:(32,58,5)
                 iter_count += 1
-                
-                print('▼batch_x,batch_y,batch_x_mark,batch_y_mark')
-                print(batch_x.shape ,batch_y.shape,batch_x_mark.shape,batch_y_mark.shape)
-                
-                model_optim.zero_grad()
-                pred, true = self._process_one_batch(
-                    train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
-                
-                print('▼pred, true')
-                print(pred.shape, true.shape)
-                
-                loss = criterion(pred, true)
-                
-                print('▼loss', loss)
+                model_optim.zero_grad()                                                        #テンソルの勾配を0に初期化
+                pred, true = self._process_one_batch(                                          #pred:(32,10,8)
+                    train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)                  #true:(32,10,8)
+                loss = criterion(pred, true)                                                   #loss:スカラー
                 
                 train_loss.append(loss.item())
                 
