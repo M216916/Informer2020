@@ -324,25 +324,24 @@ class Exp_Informer(Exp_Basic):
         
         # encoder - decoder
         if self.args.use_amp:                                                                 #self.args.use_amp=false のため不実行
-            with torch.cuda.amp.autocast():
-                if self.args.output_attention:
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-                    print('【1-1】self.args.use_amp -> self.args.output_attention')
-                else:
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
-                    print('【1-2】self.args.use_amp -> else')
+            with torch.cuda.amp.autocast():                                                   #↓
+                if self.args.output_attention:                                                #↓
+                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]     #↓
+                else:                                                                         #↓
+                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)        #↓
+                    
         else:
             if self.args.output_attention:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
-#                print('【2-1】else -> self.args.output_attention')
+                print('▼self.args.output_attention', self.args.output_attention)
+                print('【2-1】else -> self.args.output_attention')
             else:
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)
 #                print('【2-2】else -> else')
                 
-#        print('▼self.args.use_amp', self.args.use_amp)
-                
+
         if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
-            outputs = dataset_object.inverse_transform(outputs)
+            outputs = dataset_object.inverse_transform(outputs)                               #↓
 
         f_dim = -1 if self.args.features=='MS' else 0
         batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)
