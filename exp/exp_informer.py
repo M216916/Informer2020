@@ -53,8 +53,12 @@ class Exp_Informer(Exp_Basic):
                 self.device
             ).float()
         
-        if self.args.use_multi_gpu and self.args.use_gpu:
-            model = nn.DataParallel(model, device_ids=self.args.device_ids)
+        print('▼self.args.e_layers', self.args.e_layers)
+        print('▼self.args.s_layers', self.args.s_layers)
+        
+        if self.args.use_multi_gpu and self.args.use_gpu:                       #不実行 args.use_multi_gpu = False / args.use_gpu = True
+            model = nn.DataParallel(model, device_ids=self.args.device_ids)     #不実行
+            
         return model
 
     def _get_data(self, flag):
