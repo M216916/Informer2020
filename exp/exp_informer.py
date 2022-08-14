@@ -28,7 +28,7 @@ class Exp_Informer(Exp_Basic):
             'informerstack':InformerStack,
         }
         if self.args.model=='informer' or self.args.model=='informerstack':
-            e_layers = self.args.e_layers if self.args.model=='informer' else self.args.s_layers
+            e_layers = self.args.e_layers if self.args.model=='informer' else self.args.s_layers    #args.e_layers = 2 / args.s_layers = None
             model = model_dict[self.args.model](
                 self.args.enc_in,
                 self.args.dec_in, 
@@ -52,9 +52,6 @@ class Exp_Informer(Exp_Basic):
                 self.args.mix,
                 self.device
             ).float()
-        
-        print('▼self.args.e_layers', self.args.e_layers)
-        print('▼self.args.s_layers', self.args.s_layers)
         
         if self.args.use_multi_gpu and self.args.use_gpu:                       #不実行 args.use_multi_gpu = False / args.use_gpu = True
             model = nn.DataParallel(model, device_ids=self.args.device_ids)     #不実行
