@@ -78,18 +78,25 @@ class Informer(nn.Module):
         
         enc_out = self.enc_embedding(x_enc, x_mark_enc)                                              # x_enc:(32,96,8) ／ x_mark_enc:(32,96,5)
                                                                                                      # → enc_out:(32,96,512)
-        enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)
+            
+        enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)                              # enc_out:(32,96,512) ／ attn_mask:None
+                                                                                                     # → enc_out:(32,48,512) ／ attn_mask:[None, None]
 
-        dec_out = self.dec_embedding(x_dec, x_mark_dec)
-        dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
-        dec_out = self.projection(dec_out)
+        dec_out = self.dec_embedding(x_dec, x_mark_dec)                                              # x_dec:(32,58,8) ／ x_mark_dec:(32,58,5)
+                                                                                                     # → dec_out: torch.size(58,512)の32のリスト
+        
+        dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)      # dec_self_mask:None ／ dec_enc_mask:None
+                                                                                                     # → dec_out:(32,58,512)
+        
+        dec_out = self.projection(dec_out)                                                           # dec_out:(32,58,512)
+                                                                                                     # → dec_out:(32,58,8)
         
         # dec_out = self.end_conv1(dec_out)
         # dec_out = self.end_conv2(dec_out.transpose(2,1)).transpose(1,2)
         if self.output_attention:                                                                    # self.output_attention = False のため不実行
             return dec_out[:,-self.pred_len:,:], attns                                               # ↓
         else:
-            return dec_out[:,-self.pred_len:,:] # [B, L, D]
+            return dec_out[:,-self.pred_len:,:] # [B, L, D]                                          # return:(32,10,8) … dec_out:(32,58,8)の最後10要素
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
 # ▼self.enc_embedding
