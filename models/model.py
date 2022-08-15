@@ -8,6 +8,13 @@ from models.decoder import Decoder, DecoderLayer
 from models.attn import FullAttention, ProbAttention, AttentionLayer
 from models.embed import DataEmbedding
 
+
+
+
+
+
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
 class Informer(nn.Module):
     def __init__(self, enc_in, dec_in, c_out, seq_len, label_len, out_len, 
                 factor=5, d_model=512, n_heads=8, e_layers=3, d_layers=2, d_ff=512, 
@@ -18,10 +25,17 @@ class Informer(nn.Module):
         self.pred_len = out_len
         self.attn = attn
         self.output_attention = output_attention
+        
+        print('▼self.pred_len, self.attn, self.output_attention')
+        print(self.pred_len, self.attn, self.output_attention)
 
         # Encoding
         self.enc_embedding = DataEmbedding(enc_in, d_model, embed, freq, dropout)
         self.dec_embedding = DataEmbedding(dec_in, d_model, embed, freq, dropout)
+        
+        print('▼self.enc_embedding, self.dec_embedding')
+        print(self.enc_embedding.shape, self.dec_embedding.shape)
+        
         # Attention
         Attn = ProbAttention if attn=='prob' else FullAttention
         # Encoder
@@ -80,6 +94,25 @@ class Informer(nn.Module):
         else:
             return dec_out[:,-self.pred_len:,:] # [B, L, D]
 
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 class InformerStack(nn.Module):
     def __init__(self, enc_in, dec_in, c_out, seq_len, label_len, out_len, 
