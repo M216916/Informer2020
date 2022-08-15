@@ -22,6 +22,7 @@ class Informer(nn.Module):
                 output_attention = False, distil=True, mix=True,
                 device=torch.device('cuda:0')):
         super(Informer, self).__init__()
+        
         self.pred_len = out_len                                    #self.pred_len = 10
         self.attn = attn                                           #self.attn = prob
         self.output_attention = output_attention                   #self.output_attention = False
@@ -30,9 +31,24 @@ class Informer(nn.Module):
         self.enc_embedding = DataEmbedding(enc_in, d_model, embed, freq, dropout)
         self.dec_embedding = DataEmbedding(dec_in, d_model, embed, freq, dropout)
         
-        print('▼self.enc_embedding, self.dec_embedding')
-        print(self.enc_embedding.shape, self.dec_embedding.shape)
-        
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+# ▼self.enc_embedding
+# DataEmbedding(
+#   (value_embedding)   : TokenEmbedding((tokenConv): Conv1d(8, 512, kernel_size=(3,), stride=(1,), padding=(1,), padding_mode=circular))
+#   (position_embedding): PositionalEmbedding()
+#   (temporal_embedding): TimeFeatureEmbedding((embed): Linear(in_features=5, out_features=512, bias=True))
+#   (dropout): Dropout(p=0.05, inplace=False)
+# )
+
+# ▼self.dec_embedding
+# DataEmbedding(
+#   (value_embedding): TokenEmbedding((tokenConv): Conv1d(8, 512, kernel_size=(3,), stride=(1,), padding=(1,), padding_mode=circular))
+#   (position_embedding): PositionalEmbedding()
+#   (temporal_embedding): TimeFeatureEmbedding((embed): Linear(in_features=5, out_features=512, bias=True))
+#   (dropout): Dropout(p=0.05, inplace=False)
+# )
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+
         # Attention
         Attn = ProbAttention if attn=='prob' else FullAttention
         # Encoder
