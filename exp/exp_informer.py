@@ -147,33 +147,19 @@ class Exp_Informer(Exp_Basic):
 #        print('\n▼y\n')
 #        print(train_data.data_y.shape)
 
-
-#        print('\n■vali■\n')
-#        print('\n▼vali_data\n')
-#        pprint.pprint(vars(vali_data))
-#        print('\n▼vali_loader\n')
-#        pprint.pprint(vars(vali_loader)) 
-
-#        print('\n▼stamp\n')
-#        print(vali_data.data_stamp.shape)
-#        print('\n▼x\n')
-#        print(vali_data.data_x.shape)
-#        print('\n▼y\n')
-#        print(vali_data.data_y.shape)
-
-
-#        print('\n■test■\n')
-#        print('\n▼test_data\n')
-#        pprint.pprint(vars(test_data))
-#        print('\n▼test_loader\n')
-#        pprint.pprint(vars(test_loader))
-
-#        print('\n▼stamp\n')
-#        print(test_data.data_stamp.shape)
-#        print('\n▼x\n')
-#        print(test_data.data_x.shape)
-#        print('\n▼y\n')
-#        print(test_data.data_y.shape)
+# ■train_loader
+# ┣━ いろいろ
+# ┗━■dataset (=train_data)
+#   ┣━いろいろ
+#   ┣━data_stamp:(3611,5) … vali:517 ／ test:1031
+#   ┣━data_x    :(3611,8) … 
+#   ┗━data_y    :(3611,8) … # ■train_loader
+# ┣━ いろいろ
+# ┗━■dataset (=train_data)
+#   ┣━いろいろ
+#   ┣━data_stamp:(3611,5) … vali:517 ／ test:1031
+#   ┣━data_x    :(3611,8) … 
+#   ┗━data_y    :(3611,8) … 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
