@@ -97,11 +97,11 @@ class Exp_Informer(Exp_Basic):
         print(flag, len(data_set))                       # train:3506 ／ val:508 ／ test:1022
         
         data_loader = DataLoader(
-            data_set,
-            batch_size=batch_size,
-            shuffle=shuffle_flag,
-            num_workers=args.num_workers,
-            drop_last=drop_last)
+            data_set,                                    # data.data_loader.Dataset_Custom object
+            batch_size=batch_size,                       # batch_size = 32
+            shuffle=shuffle_flag,                        # shuffle = True
+            num_workers=args.num_workers,                # num_workers = 0
+            drop_last=drop_last)                         # drop_last = True
 
         return data_set, data_loader                     # train_data, train_loader ／ vali_data, vali_loader ／ test_data, test_loader
 
