@@ -23,9 +23,16 @@ class Informer(nn.Module):
                 device=torch.device('cuda:0')):
         super(Informer, self).__init__()
         
-        self.pred_len = out_len                                    #self.pred_len = 10
-        self.attn = attn                                           #self.attn = prob
-        self.output_attention = output_attention                   #self.output_attention = False
+        
+                                                                   # enc_inc       =  8
+                                                                   # dec_inc       =  8
+                                                                   # c_out         =  8
+                                                                   # seq_len       = 96
+                                                                   # label_len     = 48
+                                                                   # out_len       = 10
+        self.pred_len = out_len                                    # self.pred_len = 10
+        self.attn = attn                                           # self.attn = prob
+        self.output_attention = output_attention                   # self.output_attention = False
 
         # Encoding
         self.enc_embedding = DataEmbedding(enc_in, d_model, embed, freq, dropout)
