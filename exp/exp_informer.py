@@ -71,7 +71,7 @@ class Exp_Informer(Exp_Basic):
             'Solar':Dataset_Custom,
             'custom':Dataset_Custom,
         }
-        Data = data_dict[self.args.data]
+        Data = data_dict[self.args.data]　　　　　　　　　# Data = Dataset_Custom
         timeenc = 0 if args.embed!='timeF' else 1
 
         if flag == 'test':
@@ -81,7 +81,8 @@ class Exp_Informer(Exp_Basic):
             Data = Dataset_Pred
         else:
             shuffle_flag = True; drop_last = True; batch_size = args.batch_size; freq=args.freq
-        data_set = Data(
+            
+        data_set = Data(                                 # Data = Dataset_Custom
             root_path=args.root_path,
             data_path=args.data_path,
             flag=flag,
@@ -93,7 +94,8 @@ class Exp_Informer(Exp_Basic):
             freq=freq,
             cols=args.cols
         )
-        print(flag, len(data_set))
+        print(flag, len(data_set))                       # train:3506 ／ val:508 ／ test:1022
+        
         data_loader = DataLoader(
             data_set,
             batch_size=batch_size,
@@ -101,7 +103,7 @@ class Exp_Informer(Exp_Basic):
             num_workers=args.num_workers,
             drop_last=drop_last)
 
-        return data_set, data_loader
+        return data_set, data_loader                     # train_data, train_loader ／ vali_data, vali_loader ／ test_data, test_loader
 
     def _select_optimizer(self):
         model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
@@ -166,8 +168,6 @@ class Exp_Informer(Exp_Basic):
 #   ┣━[3563][0] ~ [3563][3] : (48, 8)／( 0, 8)／(48, 5)／( 0, 5)
 #   ┣━ …
 #   ┗━[3610][0] ~ [3610][3] : ( 1, 8)／( 0, 8)／( 1, 5)／( 0, 5)
-
-
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
@@ -305,40 +305,40 @@ class Exp_Informer(Exp_Basic):
         return
 
     def _process_one_batch(self, dataset_object, batch_x, batch_y, batch_x_mark, batch_y_mark):
-        batch_x = batch_x.float().to(self.device)                                            #batch_x     :(32,96,8)
-        batch_y = batch_y.float()                                                            #batch_y     :(32,58,8)
-        batch_x_mark = batch_x_mark.float().to(self.device)                                  #batch_x_mark:(32,96,5)
-        batch_y_mark = batch_y_mark.float().to(self.device)                                  #batch_y_mark:(32,58,5)
+        batch_x = batch_x.float().to(self.device)                                            # batch_x     :(32,96,8)
+        batch_y = batch_y.float()                                                            # batch_y     :(32,58,8)
+        batch_x_mark = batch_x_mark.float().to(self.device)                                  # batch_x_mark:(32,96,5)
+        batch_y_mark = batch_y_mark.float().to(self.device)                                  # batch_y_mark:(32,58,5)
 
         # decoder input
         if self.args.padding==0:
-            dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()      #dec_inp:(32,10,8) pudding=0 のため要素0のテンソルを生成
-        elif self.args.padding==1:                                                                        #pudding=0 不実行
-            dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()       #↓
+            dec_inp = torch.zeros([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()      # dec_inp:(32,10,8) pudding=0 のため要素0のテンソルを生成
+        elif self.args.padding==1:                                                                        # pudding=0 不実行
+            dec_inp = torch.ones([batch_y.shape[0], self.args.pred_len, batch_y.shape[-1]]).float()       # 
             
-        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  #dec_inp:(32,58,8) … batch_y(32,0:48,8) + dec_inp:(32,10,8)
+        dec_inp = torch.cat([batch_y[:,:self.args.label_len,:], dec_inp], dim=1).float().to(self.device)  # dec_inp:(32,58,8) … batch_y(32,0:48,8) + dec_inp:(32,10,8)
 
         
         
         # encoder - decoder
-        if self.args.use_amp:                                                                 #self.args.use_amp=false のため不実行
-            with torch.cuda.amp.autocast():                                                   #↓
-                if self.args.output_attention:                                                #↓
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]     #↓
-                else:                                                                         #↓
-                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)        #↓
+        if self.args.use_amp:                                                                 # self.args.use_amp=false のため不実行
+            with torch.cuda.amp.autocast():                                                   # ×
+                if self.args.output_attention:                                                # ×
+                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]     # ×
+                else:                                                                         # ×
+                    outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)        # ×
                     
         else:
-            if self.args.output_attention:                                                    #self.args.output_attention=false のため不実行
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]         #↓
+            if self.args.output_attention:                                                    # self.args.output_attention=false のため不実行
+                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]         # ×
             else:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            #output:(32,10,8)
+                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            # output:(32,10,8)
                 
 
-        if self.args.inverse:                                                                 #self.args.inverse=false のため不実行
-            outputs = dataset_object.inverse_transform(outputs)                               #↓
+        if self.args.inverse:                                                                 # self.args.inverse=false のため不実行
+            outputs = dataset_object.inverse_transform(outputs)                               # ×
 
-        f_dim = -1 if self.args.features=='MS' else 0                                         #f_dim = 0
-        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      #batch_y:(32,10,8) … batch_y:(32,58,8)の最後10要素を取得
+        f_dim = -1 if self.args.features=='MS' else 0                                         # f_dim = 0
+        batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      # batch_y:(32,10,8) … batch_y:(32,58,8)の最後10要素を取得
 
         return outputs, batch_y
