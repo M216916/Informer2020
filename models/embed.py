@@ -106,4 +106,8 @@ class DataEmbedding(nn.Module):
     def forward(self, x, x_mark):
         x = self.value_embedding(x) + self.position_embedding(x) + self.temporal_embedding(x_mark)
         
+                                     # x:(32,96,8)                                  x_mark:(32,96,5)
+                                     #  → self.value_embedding(x)   :(32,96,512)     → elf.temporal_embedding(x_mark):(32,96,512)
+                                     #  → self.position_embedding(x):( 1,96,512)
+        
         return self.dropout(x)
