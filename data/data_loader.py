@@ -291,14 +291,8 @@ class Dataset_Custom(Dataset):
  
         return seq_x, seq_y, seq_x_mark, seq_y_mark
     
-    def __len__(self):                                                                 # data_x : (3611,8) ／ (517,8) ／ (1031,8)
-        
-        print('長さ')
-        print(len(self.data_x))
-        print(self.seq_len)
-        print(self.pred_len)
-        
-        return len(self.data_x) - self.seq_len - self.pred_len + 1                      # len    :  3506    ／  508    ／  1022
+    def __len__(self):                                                                 # data_x : (3611,8) ／ (613,8) ／ (1127,8)
+        return len(self.data_x) - self.seq_len - self.pred_len + 1                     # len    :  3506    ／  508    ／  1022
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)   
