@@ -189,15 +189,7 @@ class Dataset_ETT_minute(Dataset):
     
     
     
-    
-    
-    
-    
-    
-    
-    
-#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    
-    
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     
 class Dataset_Custom(Dataset):
     def __init__(self, root_path, flag='train', size=None, 
                  features='S', data_path='ETTh1.csv', 
@@ -241,145 +233,73 @@ class Dataset_Custom(Dataset):
             cols.remove(self.target)
         else:
             cols = list(df_raw.columns); cols.remove(self.target); cols.remove('date')
-        df_raw = df_raw[['date']+cols+[self.target]]                                   #df_raw:(5159,9)
+        df_raw = df_raw[['date']+cols+[self.target]]                                   # df_raw:(5159,9)
 
-        num_train = int(len(df_raw)*0.7)                                               #3611(5159*0.7)
-        num_test = int(len(df_raw)*0.2)                                                #1031(5159*0.2)
-        num_vali = len(df_raw) - num_train - num_test                                  #517 (5159-3611-1031)
-        border1s = [0, num_train-self.seq_len, len(df_raw)-num_test-self.seq_len]      #[   0,3515,4032]
-        border2s = [num_train, num_train+num_vali, len(df_raw)]                        #[3611,4128,5159]
-        border1 = border1s[self.set_type]                                              #上記3要素の中から1つを選択
-        border2 = border2s[self.set_type]                                              #上記3要素の中から1つを選択
+        num_train = int(len(df_raw)*0.7)                                               # 3611(5159*0.7)
+        num_test = int(len(df_raw)*0.2)                                                # 1031(5159*0.2)
+        num_vali = len(df_raw) - num_train - num_test                                  # 517 (5159-3611-1031)
+        border1s = [0, num_train-self.seq_len, len(df_raw)-num_test-self.seq_len]      # [   0,3515,4032]
+        border2s = [num_train, num_train+num_vali, len(df_raw)]                        # [3611,4128,5159]
+        border1 = border1s[self.set_type]                                              # 上記3要素の中から1つを選択
+        border2 = border2s[self.set_type]                                              # 上記3要素の中から1つを選択
         
         if self.features=='M' or self.features=='MS':
-            cols_data = df_raw.columns[1:]                                             #カラム('SHO_MTI', 'ENEOS', 'SBI_HD', 'JT', 'TAKEDA', 'TO_DEN', 'AGC', 'TOYOTA')
-            df_data = df_raw[cols_data]                                                #df_data:(5159,8)
+            cols_data = df_raw.columns[1:]                                             # カラム('SHO_MTI', 'ENEOS', 'SBI_HD', 'JT', 'TAKEDA', 'TO_DEN', 'AGC', 'TOYOTA')
+            df_data = df_raw[cols_data]                                                # df_data:(5159,8)
         elif self.features=='S':
             df_data = df_raw[[self.target]]
 
         if self.scale:
-            train_data = df_data[border1s[0]:border2s[0]]                              #train_data:(3611,8)
-            self.scaler.fit(train_data.values)                                         #train_dataの平均・標準偏差(多分)
-            data = self.scaler.transform(df_data.values)                               #data:(5159,8):train_dataでスケーリング
+            train_data = df_data[border1s[0]:border2s[0]]                              # train_data:(3611,8)
+            self.scaler.fit(train_data.values)                                         # train_dataの平均・標準偏差(多分)
+            data = self.scaler.transform(df_data.values)                               # data:(5159,8):train_dataでスケーリング
         else:
             data = df_data.values
 
-            
-            
-#//////////////////////////////////////////////////////////////////////////////////////////////////////           
-#        print('\n▼cols_data')
-#        print(cols_data)
-#        print(cols_data.shape)
-        
-#        print('\n▼df_data')
-#        print(df_data)
-#        print(df_data.shape)
-        
-#        print('\n▼train_data')
-#        print(train_data)
-#        print(train_data.shape)
-        
-#        print('\n▼data')
-#        print(data)
-#        print(data.shape)
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
               
-              
-              
-              
-        df_stamp = df_raw[['date']][border1:border2]                                       #df_stamp:(3611,1) … train 0~3611／vali 3515~4128／test 4032~5159 
+        df_stamp = df_raw[['date']][border1:border2]                                   # df_stamp:(3611,1) … train 0~3611／vali 3515~4128／test 4032~5159 
         df_stamp['date'] = pd.to_datetime(df_stamp.date)
-        data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)         #data_stamp:(3611,5) … ただdf_stampを変換しただけ？
+        data_stamp = time_features(df_stamp, timeenc=self.timeenc, freq=self.freq)     # data_stamp:(3611,5) … ただdf_stampを変換しただけ？
 
-        self.data_x = data[border1:border2]                                                #data_x:(3611,8) … 標準化されている(trainのとき)
-        if self.inverse:                                                                   #       ( 613,8)
-            self.data_y = df_data.values[border1:border2]                                  #       (1127,8)
+        self.data_x = data[border1:border2]                                            # data_x:(3611,8) … 標準化されている(trainのとき)
+        if self.inverse:                                                               #        ( 613,8)
+            self.data_y = df_data.values[border1:border2]                              #        (1127,8)
         else:
-            self.data_y = data[border1:border2]                                            #data_y:(3611,8) … 標準化されていない(trainのとき)
-        self.data_stamp = data_stamp                                                       #       ( 613.8)
-                                                                                           #       (1127,8)
-        
-        
-        
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
-#        print('\n▼df_stamp')
-#        print(df_stamp)
-#        print(df_stamp.shape)
-        
-#        print('\n▼data_stamp')
-#        print(data_stamp)
-#        print(data_stamp.shape)
-        
-#        print('\n▼data_x')
-#        print(data[border1:border2])
-#        print(data[border1:border2].shape)
-        
-#        print('\n▼data_y')
-#        print(df_data.values[border1:border2])
-#        print(df_data.values[border1:border2].shape)
-        
-#        print('border1,border2')
-#        print(border1,border2)
-#//////////////////////////////////////////////////////////////////////////////////////////////////////        
-        
-        
+            self.data_y = data[border1:border2]                                        # data_y:(3611,8) … 標準化されていない(trainのとき)
+        self.data_stamp = data_stamp                                                   #        ( 613.8)
+                                                                                       #        (1127,8)
     
-    def __getitem__(self, index):
-        s_begin = index
-        s_end = s_begin + self.seq_len
-        r_begin = s_end - self.label_len 
-        r_end = r_begin + self.label_len + self.pred_len
+                                                                                       #                           label       pred
+                                                                                       #                   ┏━━━━━━━(48)━━━━━━┳━(10)━┓
+    def __getitem__(self, index):                                                      #                   ▼r_begin          ┃      ▼r_end
+        s_begin = index                                                                # ■-----------------■-----------------■------■
+        s_end = s_begin + self.seq_len                                                 # ▲s_begin                            ▲s_end
+        r_begin = s_end - self.label_len                                               # ┗━━━━━━━━━━━━━━━━(96)━━━━━━━━━━━━━━━┛
+        r_end = r_begin + self.label_len + self.pred_len                               #                  sequence
        
-        seq_x = self.data_x[s_begin:s_end]                       #seq_x     :(96,8) ← 標準化した data_x から抽出
-        if self.inverse:
-            seq_y = np.concatenate(
-                [self.data_x[r_begin:r_begin+self.label_len], 
-                 self.data_y[r_begin+self.label_len:r_end]], 0)
+        seq_x = self.data_x[s_begin:s_end]                                             # seq_x     :(96,8) ← 標準化した data_x から抽出
+        
+        if self.inverse:                                                               # ※self.inverse == False
+            seq_y = np.concatenate(                                                    # ×
+                [self.data_x[r_begin:r_begin+self.label_len],                          # ×
+                 self.data_y[r_begin+self.label_len:r_end]], 0)                        # ×
 
         else:
-            seq_y = self.data_y[r_begin:r_end]                   #seq_y     :(58,8) ← 標準化されていない data_y から抽出　※self.inverse == False(こっち通過)
-        seq_x_mark = self.data_stamp[s_begin:s_end]              #seq_x_mark:(96,5) ← seq_x のタイムスタンプ
-        seq_y_mark = self.data_stamp[r_begin:r_end]              #seq_y_mark:(58,5) ← seq_y のタイムスタンプ
-        
-        
-#//////////////////////////////////////////////////////////////////////////////////////////////////////
-#        print('\n▼index, s_begin, s_end, r_begin, r_end')
-#        print(index, s_begin, s_end, r_begin, r_end)
-        
-#        print('\n▼seq_x')
-#        print(seq_x.shape)
-        
-#        print('\n▼seq_y')
-#        print(seq_y.shape)        
-        
-#        print('\n▼seq_x_mark')
-#        print(seq_x_mark.shape)
-        
-#        print('\n▼seq_y_mark')
-#        print(seq_y_mark.shape)      
-#////////////////////////////////////////////////////////////////////////////////////////////////////// 
-        
-        
-
+            seq_y = self.data_y[r_begin:r_end]                                         # seq_y     :(58,8) ← 標準化されていない data_y から抽出
+        seq_x_mark = self.data_stamp[s_begin:s_end]                                    # seq_x_mark:(96,5) ← seq_x のタイムスタンプ
+        seq_y_mark = self.data_stamp[r_begin:r_end]                                    # seq_y_mark:(58,5) ← seq_y のタイムスタンプ
+ 
         return seq_x, seq_y, seq_x_mark, seq_y_mark
     
     def __len__(self):
+        
+        print('長さ')
+        print(len(self.data_x) - self.seq_len- self.pred_len + 1)
         return len(self.data_x) - self.seq_len- self.pred_len + 1
 
     def inverse_transform(self, data):
-        return self.scaler.inverse_transform(data)
-
-    
+        return self.scaler.inverse_transform(data)   
 #■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
