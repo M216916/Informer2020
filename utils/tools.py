@@ -73,4 +73,14 @@ class StandardScaler():
         if data.shape[-1] != mean.shape[-1]:
             mean = mean[-1:]
             std = std[-1:]
+            
+        print('\n▼data')
+        print(data.shape)        
+        print('▼mean')
+        print(mean)
+        print('▼std')
+        print(std)
+        
+        
+        
         return (data * std) + mean
