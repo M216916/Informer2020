@@ -294,8 +294,8 @@ class Dataset_Custom(Dataset):
     def __len__(self):                                                                 # data_x : (3611,8) ／ (613,8) ／ (1127,8)
         return len(self.data_x) - self.seq_len - self.pred_len + 1                     # len    :  3506    ／  508    ／  1022
 
-    def inverse_transform(self, data):
-        return self.scaler.inverse_transform(data)   
+    def inverse_transform(self, data):                                                 # ×
+        return self.scaler.inverse_transform(data)                                     # ×
 #■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     
     
