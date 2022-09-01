@@ -26,16 +26,17 @@ class PositionalEmbedding(nn.Module):
 class TokenEmbedding(nn.Module):
     def __init__(self, c_in, d_model):
         super(TokenEmbedding, self).__init__()
-        padding = 1 if torch.__version__>='1.5.0' else 2                                         # padding = 1
-        self.tokenConv = nn.Conv1d(in_channels=c_in, out_channels=d_model,                       # c_in = 8
-                                    kernel_size=3, padding=padding, padding_mode='circular')     # d_model = 512
+        padding = 1 if torch.__version__>='1.5.0' else 2                                         # padding = 1   (両端に1だけ挿入→2大きくなる)
+        self.tokenConv = nn.Conv1d(in_channels=c_in, out_channels=d_model,                       # c_in    = 8   (入力チャネル数)
+                                    kernel_size=3, padding=padding, padding_mode='circular')     # d_model = 512 (出力チャネル数)
+                                                                                                 # kernel_ = 3   (カーネルの大きさ)
         
         for m in self.modules():
             if isinstance(m, nn.Conv1d):
                 nn.init.kaiming_normal_(m.weight,mode='fan_in',nonlinearity='leaky_relu')
 
     def forward(self, x):
-        x = self.tokenConv(x.permute(0, 2, 1)).transpose(1,2)   　　　　　　　　　　　　　　　　　# x:(32,96,8)
+        x = self.tokenConv(x.permute(0, 2, 1)).transpose(1,2)                                    # x:(32,96,8)
                                                                                                  # → permute:(32,8,96)
                                                                                                  # → tokenConv:(32,512,96)
                                                                                                  # → transpose:(32,512,96)
