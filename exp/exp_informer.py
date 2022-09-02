@@ -121,8 +121,10 @@ class Exp_Informer(Exp_Basic):
         self.model.eval()
         total_loss = []
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(vali_loader):
-            pred, true = self._process_one_batch(
-                vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#            pred, true = self._process_one_batch(vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+            pred, true, extra = self._process_one_batch(vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
             loss = criterion(pred.detach().cpu(), true.detach().cpu())
             total_loss.append(loss)
         total_loss = np.average(total_loss)
@@ -203,8 +205,11 @@ class Exp_Informer(Exp_Basic):
                                                                                                #batch_y_mark:(32,58,5)
                 iter_count += 1
                 model_optim.zero_grad()                                                        #テンソルの勾配を0に初期化
-                pred, true = self._process_one_batch(                                          #pred:(32,10,8)
-                    train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)                  #true:(32,10,8)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#                pred, true = self._process_one_batch(                                          #pred:(32,10,8)
+#                    train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)                  #true:(32,10,8)
+                pred, true, extra = self._process_one_batch(train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
                 loss = criterion(pred, true)                                                   #loss:スカラー
                 
                 train_loss.append(loss.item())
@@ -253,8 +258,10 @@ class Exp_Informer(Exp_Basic):
         trues = []
         
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(test_loader):
-            pred, true = self._process_one_batch(
-                test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#            pred, true = self._process_one_batch(test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+            pred, true, extra = self._process_one_batch(test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
             preds.append(pred.detach().cpu().numpy())
             trues.append(true.detach().cpu().numpy())
 
@@ -279,6 +286,12 @@ class Exp_Informer(Exp_Basic):
         
 #■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         all_data, all_loader = self._get_data(flag='all')
+    
+        print('▼ここから')
+
+        for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(all_loader):
+            pred, true, extra = self._process_one_batch(all_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+            print(extra.shape)     
 #■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         return
@@ -296,8 +309,10 @@ class Exp_Informer(Exp_Basic):
         preds = []
         
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(pred_loader):
-            pred, true = self._process_one_batch(
-                pred_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#            pred, true = self._process_one_batch(test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+            pred, true, extra = self._process_one_batch(test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
             preds.append(pred.detach().cpu().numpy())
 
         preds = np.array(preds)
@@ -349,4 +364,7 @@ class Exp_Informer(Exp_Basic):
         f_dim = -1 if self.args.features=='MS' else 0                                         # f_dim = 0
         batch_y = batch_y[:,-self.args.pred_len:,f_dim:].to(self.device)                      # batch_y:(32,10,8) … batch_y:(32,58,8)の最後10要素を取得
 
-        return outputs, batch_y
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#        return outputs, batch_y
+        return outputs, batch_y, enbedding_vec
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
