@@ -288,10 +288,13 @@ class Exp_Informer(Exp_Basic):
         all_data, all_loader = self._get_data(flag='all')
     
         print('▼ここから')
+        embedding_list = []
 
         for i, (batch_x,batch_y,batch_x_mark,batch_y_mark) in enumerate(all_loader):
             pred, true, extra = self._process_one_batch(all_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
-            print(extra.shape)     
+            
+            embedding_list.append(extra)
+            print(torch.stack(embedding_list).size())   
 #■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         return
