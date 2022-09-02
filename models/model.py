@@ -103,7 +103,10 @@ class Informer(nn.Module):
         if self.output_attention:                                                                    # self.output_attention = False のため不実行
             return dec_out[:,-self.pred_len:,:], attns                                               # ↓
         else:
-            return dec_out[:,-self.pred_len:,:] # [B, L, D]                                          # return:(32,10,8) … dec_out:(32,58,8)の最後10要素
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#            return dec_out[:,-self.pred_len:,:]
+            return dec_out[:,-self.pred_len:,:], enc_out         # [B, L, D]                         # return:(32,10,8) … dec_out:(32,58,8)の最後10要素
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
         
 #//////////////////////////////////////////////////////////////////////////////////////////////////////
 # ▼self.enc_embedding
