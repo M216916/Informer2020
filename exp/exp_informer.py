@@ -355,8 +355,12 @@ class Exp_Informer(Exp_Basic):
             if self.args.output_attention:                                                    # self.args.output_attention=false のため不実行
                 outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]         # ×
             else:
-                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            # output:(32,10,8)
-                
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)            # output:(32,10,8)
+                outputs = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[0]
+                enbedding_vec = self.model(batch_x, batch_x_mark, dec_inp, batch_y_mark)[1]
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    
 
         if self.args.inverse:                                                                 # self.args.inverse=false のため不実行
             outputs = dataset_object.inverse_transform(outputs)                               # ×
